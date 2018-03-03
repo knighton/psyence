@@ -141,6 +141,8 @@ void MNIST::Init(const vector<MNISTSplit*>& splits) {
 }
 
 void MNIST::Load(const string& dirname, Trace* trace) {
+    trace->Enter("load_mnist");
+
     trace->Enter("train_split");
     auto train_split = new MNISTSplit();
     auto images_filename = dirname + "train-images-idx3-ubyte";
@@ -158,6 +160,8 @@ void MNIST::Load(const string& dirname, Trace* trace) {
     trace->Enter("init");
     auto splits = {train_split, test_split};
     Init(splits);
+    trace->Exit();
+
     trace->Exit();
 }
 
