@@ -21,6 +21,9 @@ class ImgClfDatasetSplit : public DatasetSplit {
 
     virtual void Get(size_t index, float* x, float* y) const;
 
+    virtual void AvgPool(const vector<size_t>& pool_shape,
+                         ImgClfDatasetSplit* out);
+
   protected:
     const uint8_t* pixels_{nullptr};
     Class num_classes_{0};
@@ -35,6 +38,9 @@ class ImgClfDataset : public Dataset {
     virtual ~ImgClfDataset();
 
     virtual void InitImgClfDataset(const vector<ImgClfDatasetSplit*>& splits);
+
+    virtual void AvgPool(const vector<size_t>& pool_shape,
+                         ImgClfDataset* out) const;
 
   protected:
     Class num_classes_{0};
