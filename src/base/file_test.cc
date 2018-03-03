@@ -5,8 +5,8 @@
 #include "base/file.h"
 
 using psyence::base::file::FileSize;
-using psyence::base::file::FileToBuffer;
 using psyence::base::file::FileToString;
+using psyence::base::file::LoadFileTo;
 
 int main() {
     auto filename = "test.bin";
@@ -26,8 +26,8 @@ int main() {
 
     string buf;
     buf.resize(file_size);
-    assert(FileToBuffer(filename, file_size,
-                        reinterpret_cast<uint8_t*>(&buf[0])));
+    assert(LoadFileTo(filename, file_size,
+                      reinterpret_cast<uint8_t*>(&buf[0])));
     assert(buf == a);
 
     string buf2 = FileToString(filename);

@@ -18,7 +18,7 @@ bool FileSize(const char* filename, size_t *num_bytes) {
     return true;
 }
 
-bool FileToBuffer(const char* filename, size_t num_bytes, uint8_t* buf) {
+bool LoadFileTo(const char* filename, size_t num_bytes, uint8_t* buf) {
     FILE* f = fopen(filename, "r");
     if (!f) {
         return false;
@@ -31,6 +31,19 @@ bool FileToBuffer(const char* filename, size_t num_bytes, uint8_t* buf) {
 
     fclose(f);
     return true;
+}
+
+bool LoadFile(const char* filename, size_t* num_bytes, uint8_t** buf) {
+    if (!FileSize(filename, num_bytes)) {
+        return false;
+    }
+
+    *buf = new uint8_t[*num_bytes];
+    if (!buf) {
+        return false;
+    }
+
+    return LoadFileTo(filename, *num_bytes, *buf);
 }
 
 string FileToString(const char* filename) {
