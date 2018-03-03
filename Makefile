@@ -84,7 +84,7 @@ run-$(BIN_ROOT)/%: $(BIN_ROOT)/%
 	$<
 
 TEST_BINS = $(patsubst $(SRC_ROOT)/%.cc, $(BIN_ROOT)/%, \
-			  $(shell find $(SRC_ROOT) -type f -name "*_test.cc"))
+			  $(shell find $(SRC_ROOT) -type f -name "*_test.cc" | sort))
 
 TEST_CMDS = $(patsubst %, run-%, $(TEST_BINS))
 
