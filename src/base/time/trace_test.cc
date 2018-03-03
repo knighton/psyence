@@ -2,8 +2,10 @@
 #include <chrono>
 #include <thread>
 
+#include "base/time/duration_pretty_printer.h"
 #include "base/time/trace.h"
 
+using psyence::base::time::AsTightestSubseconds;
 using psyence::base::time::ScopeTracer;
 using psyence::base::time::Trace;
 using namespace std::chrono_literals;
@@ -27,7 +29,9 @@ int main() {
         }
     }
 
+    auto dpp = AsTightestSubseconds::New();
     string text;
-    trace.Report(&text);
+    trace.Report(*dpp, &text);
     assert(!text.empty());
+    delete dpp;
 }

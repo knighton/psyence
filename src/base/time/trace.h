@@ -4,6 +4,9 @@
 #include <string>
 #include <vector>
 
+#include "base/time/duration_pretty_printer.h"
+
+using psyence::base::time::DurationPrettyPrinter;
 using std::string;
 using std::vector;
 
@@ -34,7 +37,8 @@ class TimedSection {
     void Exit(int64_t exit_ns);
 
     // Dump recursive timings to string, line by line.
-    void Report(size_t num_indents, size_t indent_size, string* text) const;
+    void Report(const DurationPrettyPrinter& pp, size_t num_indents,
+                size_t indent_size, string* text) const;
 
   private:
     // Human-friendly name of this section.
@@ -66,7 +70,7 @@ class Trace {
     void Exit();
 
     // Dump recursive timings to string, line by line.
-    void Report(string* text) const;
+    void Report(const DurationPrettyPrinter& pp, string* text) const;
 
   private:
     // Free memory.

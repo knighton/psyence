@@ -33,13 +33,16 @@ void TimedSection::Exit(int64_t exit_ns) {
     exit_ns_ = exit_ns;
 }
 
-void TimedSection::Report(size_t num_indents, size_t indent_size,
-                          string* text) const {
-    auto ns = exit_ns_ - enter_ns_;
+void TimedSection::Report(const DurationPrettyPrinter& pp, size_t num_indents,
+                          size_t indent_size, string* text) const {
+    auto duration_ns = exit_ns_ - enter_ns_;
+    string duration_str;
+    pp.PrintNanosec(duration_ns, &duration_str);
     string spacing = string(num_indents * indent_size, ' ');
-    StringAppendF(text, "%s%s: %ld ns\n", spacing.data(), name_.data(), ns);
+    StringAppendF(text, "%s%s: %s\n", spacing.data(), name_.data(),
+                  duration_str.data());
     for (auto& child : children_) {
-        child->Report(num_indents + 1, indent_size, text);
+        child->Report(pp, num_indents + 1, indent_size, text);
     }
 }
 
@@ -74,10 +77,10 @@ void Trace::Exit() {
     head_ = head_->parent();
 }
 
-void Trace::Report(string* text) const {
+void Trace::Report(const DurationPrettyPrinter& pp, string* text) const {
     assert(head_ == root_);
     for (auto& child : root_->children()) {
-        child->Report(0, 2, text);
+        child->Report(pp, 0, 2, text);
     }
 }
 
