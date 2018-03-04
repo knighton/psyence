@@ -18,7 +18,7 @@ int main() {
         for (int j = 0; j < 1000; ++j) {
         }
         auto t = NanoClock() - t0;
-        assert(0 < t && t < 500);
+        assert(0 < t && t < 1000);
     }
     auto tt = Clock() - t_begin;
     assert(0 < tt && tt < 1);
