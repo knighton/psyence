@@ -27,3 +27,15 @@
 #include "ext/crow/crow_all.h"
 
 #pragma clang diagnostic pop
+
+namespace psyence {
+namespace base {
+namespace server {
+namespace crow {
+
+using namespace ::crow;
+
+}  // namespace crow
+}  // namespace server
+}  // namespace base
+}  // namespace psyence
