@@ -10,4 +10,12 @@
 
 #pragma clang diagnostic pop
 
+namespace psyence {
+namespace base {
+namespace collection {
+
 using json = nlohmann::json;
+
+}  // namespace collection
+}  // namespace base
+}  // namespace psyence

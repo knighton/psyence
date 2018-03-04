@@ -1,6 +1,8 @@
 #include <cassert>
 
-#include "ext/json.h"
+#include "base/collection/json.h"
+
+using psyence::base::collection::json;
 
 int main() {
     json x;
