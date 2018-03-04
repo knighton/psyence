@@ -21,6 +21,7 @@ CXX = clang++-5.0
 WARN_NO_FLAGS = \
     -Wno-c++98-compat \
     -Wno-c++98-compat-pedantic \
+    -Wno-double-promotion \
     -Wno-format-nonliteral \
     -Wno-padded \
     $(BASE_STR_FLAGS) \
