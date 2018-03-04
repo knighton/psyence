@@ -40,9 +40,10 @@ CXX_FLAGS = \
     -std=c++17 \
     $(WARN_FLAGS) \
 
-LD_FLAGS =
-
-LD_LIBS =
+LD_FLAGS = \
+	-lboost_system \
+	-lboost_thread \
+	-lpthread
 
 # ------------------------------------------------------------------------------
 # 2. File collections
@@ -65,7 +66,7 @@ $(BUILD_ROOT)/%.o: $(SRC_ROOT)/%.cc $(HEADERS)
 
 $(BIN_ROOT)/%: $(SRC_ROOT)/%.cc $(OBJS)
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXX_FLAGS) $(OBJS) $< -o $@ $(LD_FLAGS) $(LD_LIBS)
+	$(CXX) $(CXX_FLAGS) $(OBJS) $< -o $@ $(LD_FLAGS)
 
 .SECONDARY: $(OBJS)
 
