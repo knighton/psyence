@@ -38,6 +38,9 @@ void OnlineCorrelater::Init(size_t num_variables, float momentum) {
     momentum_ = momentum;
     means_ = new float[num_variables]();
     stds_ = new float[num_variables]();
+    for (size_t i = 0; i < num_variables; ++i) {
+        stds_[i] = 1;
+    }
     cov_ = new float[num_variables * num_variables]();
     cor_ = new float[num_variables * num_variables]();
 }
