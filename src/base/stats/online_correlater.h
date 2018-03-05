@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdio>
 
 namespace psyence {
 namespace base {
@@ -22,6 +23,9 @@ class OnlineCorrelater {
 
     // Allocate space.
     void Init(size_t num_variables, float momentum);
+
+    // Dump statistics to file.
+    void Report(FILE* out) const;
 
     // Update statistics given one sample.
     void Update(const float* variables);
