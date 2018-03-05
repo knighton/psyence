@@ -69,15 +69,15 @@ void Summary::InitFromData(size_t num_values, const float* values,
     std_ /= num_values;
     std_ = static_cast<float>(sqrt(std_));
 
-    float* sorted = new float[num_values];
+    auto sorted = new float[num_values];
     for (size_t i = 0; i < num_values; ++i) {
         sorted[i] = values[i];
     }
-    sort(sorted, &sorted[num_values]);
+    sort(sorted, sorted + num_values);
 
     num_pcts_ = num_pcts;
     if (num_pcts) {
-        pcts_ = new float[num_pcts];
+        pcts_ = new float[num_pcts + 1];
         size_t pct_index = 0;
         for (size_t i = 0; i < num_pcts + 1; ++i) {
             size_t sorted_index = i * num_values / num_pcts;
@@ -91,23 +91,28 @@ void Summary::InitFromData(size_t num_values, const float* values,
     delete [] sorted;
 }
 
-void Summary::Report(FILE* out, size_t max_bar_len) const {
+void Summary::Report(const char* name, size_t max_bar_len, FILE* out) const {
+    fprintf(out, "\n");
+    fprintf(out, "Summary of %s:\n", name);
     auto mean = sum_ / count_;
     fprintf(out, "%zu values (min %.3f -- mean %.3f -- max %.3f) std %.3f.\n",
             count_, min_, mean, max_, std_);
     if (!max_bar_len) {
         return;
     }
-    for (size_t i = 0; i < num_pcts_; ++i) {
-        auto& pct = pcts_[i];
-        size_t bar_len;
-        if (pct <= 0) {
-            bar_len = 0;
-        } else {
-            bar_len = static_cast<size_t>(pct * max_bar_len / max_);
+    if (pcts_) {
+        for (size_t i = 0; i < num_pcts_; ++i) {
+            auto& pct = pcts_[i];
+            size_t bar_len;
+            if (pct <= 0) {
+                bar_len = 0;
+            } else {
+                bar_len = static_cast<size_t>(pct * max_bar_len / max_);
+            }
+            fprintf(out, "%10.3f %s\n", pct, string(bar_len, '-').data());
         }
-        fprintf(out, "%s\n", string(bar_len, '-').data());
     }
+    printf("\n");
 }
 
 }  // namespace stats

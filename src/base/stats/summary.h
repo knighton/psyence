@@ -31,7 +31,7 @@ class Summary {
     void InitFromData(size_t num_values, const float* values, size_t num_pcts);
 
     // Print a summary to the given file handle.
-    void Report(FILE* out, size_t bar_max_len) const;
+    void Report(const char* name, size_t bar_max_len, FILE* out) const;
 
   private:
     // Free memory.
