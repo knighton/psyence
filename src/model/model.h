@@ -14,15 +14,16 @@ class Model {
     // Free memory.
     ~Model();
 
-    // Initialize internals.
-    void Init(Adapter* io, size_t num_neurons, size_t ticks_per_assoc,
-              size_t ticks_per_pred, float cor_momentum);
+    // Setup.
+    //
+    // Takes ownership of "io".
+    void Init(Adapter* io, size_t num_neurons, float correlation_momentum);
 
-    // Associate an X and Y.
-    void Associate(const float* x, const float* y_true);
+    // Given X and Y, learn X -> Y.
+    void Train(size_t num_ticks, const float* x, const float* y_true);
 
-    // Given X, predict Y.
-    void Predict(const float* x, float* pred_means_per_tick,
+    // Given X, predict X -> Y.
+    void Predict(size_t num_ticks, const float* x, float* pred_means_per_tick,
                  float* pred_stds_per_tick);
 
   private:
@@ -38,10 +39,6 @@ class Model {
     // The total number of neurons.
     size_t num_neurons_;
 
-    // Ticks per train/evaluation sample.
-    size_t ticks_per_assoc_;
-    size_t ticks_per_pred_;
-
     // Neuron activations, and the buffer for computing the new activations.
     //
     // Shape: num_neurons_.
@@ -53,10 +50,9 @@ class Model {
     // Shape: num_neurons_ * num_neurons_.
     float* weight_{nullptr};
 
-    // Momentum of fields of cor_.
-    float cor_momentum_;
-
     // How neurons correlate with each other in their activity.
+    //
+    // Used for gradually improving the wiring of the network.
     //
     // Shape: num_neurons_, num_neurons_ * num_neurons_.
     OnlineCorrelater cor_;

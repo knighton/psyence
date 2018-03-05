@@ -18,13 +18,11 @@ SRC_ROOT = src
 
 CXX = clang++-5.0
 
-WARN_NO_FLAGS = \
-    -Wno-c++98-compat \
-    -Wno-c++98-compat-pedantic \
-    -Wno-double-promotion \
-    -Wno-format-nonliteral \
-    -Wno-padded \
-    $(BASE_STR_FLAGS) \
+GFLAGS_WARN_FLAGS = \
+    -Wno-exit-time-destructors \
+    -Wno-global-constructors \
+    -Wno-missing-variable-declarations \
+    -Wno-undefined-func-template \
 
 WARN_FLAGS = \
     -Wall \
@@ -32,7 +30,13 @@ WARN_FLAGS = \
     -Weverything \
     -Wextra \
     -Wpedantic \
-    $(WARN_NO_FLAGS) \
+    -Wno-c++98-compat \
+    -Wno-c++98-compat-pedantic \
+    -Wno-disabled-macro-expansion \
+    -Wno-double-promotion \
+    -Wno-format-nonliteral \
+    -Wno-padded \
+    $(GFLAGS_WARN_FLAGS) \
 
 CXX_FLAGS = \
     -Isrc/ \
@@ -43,6 +47,7 @@ CXX_FLAGS = \
 LD_FLAGS = \
 	-lboost_system \
 	-lboost_thread \
+	-lgflags \
 	-lpthread
 
 # ------------------------------------------------------------------------------
