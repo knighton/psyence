@@ -46,9 +46,11 @@ void Trainer::Init(const Dataset* dataset, size_t train_split,
 
     CROW_ROUTE(app_, "/stop")([this]() {
         Stop();
-        this->app_.stop();
-        return "";
+        return "Stopped.";
     });
+
+    app_.loglevel(crow::LogLevel::Warning);
+    app_.multithreaded();
 
     stop_requested_ = false;
 
@@ -135,27 +137,46 @@ void Trainer::RunIteration(FILE* eval_file) {
 }
 
 void Trainer::ServerThread(uint16_t port) {
-    app_.loglevel(crow::LogLevel::Warning).port(port).multithreaded().run();
+    app_.port(port);
+    app_.run();
 }
 
 size_t Trainer::Start(size_t num_iter, uint16_t port) {
+    // The server listening on another thread.
     std::thread(&Trainer::ServerThread, this, port).detach();
+
+    // The training loop.
     FILE* eval_file = fopen(eval_filename_.data(), "a");
-    for (size_t i = 0; i < num_iter; ++i) {
+    size_t i = 0;
+    while (true) {
+        // Take the lock.
         lock_.lock();
+
+        // If stop requested, we're done.
         if (stop_requested_) {
-            fclose(eval_file);
             stop_requested_ = false;
-            app_.stop();
-            std::this_thread::sleep_for(10ms);
-            lock_.unlock();
-            return i;
+            goto done;
         }
+
+        // Else, run one training or validation sample.
         RunIteration(eval_file);
+
+        // If we have completed the last iteration normally, we're done.
+        if (i == num_iter) {
+            goto done;
+        }
+
+        // Else, keep going, releasing the lock.
         lock_.unlock();
+        ++i;
     }
+
+done:
+    // After either being stopped early or completing normally.
     fclose(eval_file);
-    return num_iter;
+    app_.stop();
+    lock_.unlock();
+    return i;
 }
 
 void Trainer::Stop() {

@@ -44,7 +44,7 @@ DEFINE_string(eval_file, "data/eval.bin", "Name of file containing evaluation "
               "data for analysis");
 
 // Training flags.
-DEFINE_uint64(num_iter, 1000000, "Number of iterations of training and "
+DEFINE_uint64(num_iter, 1000000000, "Number of iterations of training and "
               "validation run for");
 DEFINE_uint64(port, 1337, "Port at which the model trainer serves a basic "
               "interface");
