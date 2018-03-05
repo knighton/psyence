@@ -85,9 +85,7 @@ void Run(const Dataset& dataset, Model* model, Trace* trace) {
                  ticks_per_predict, FLAGS_eval_file);
     auto num_iter = static_cast<size_t>(FLAGS_num_iter);
     auto port = static_cast<uint16_t>(FLAGS_port);
-printf("about to trainer start\n");
     trainer.Start(num_iter, port);
-printf("trainer start returned\n");
     trace->Exit();
 }
 
