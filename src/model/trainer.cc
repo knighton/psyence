@@ -84,6 +84,7 @@ void Trainer::Init(const Dataset* dataset, size_t train_split,
     auto eval_meta_filename = eval_filename + ".meta.json";
     auto eval_meta_file = fopen(eval_meta_filename.data(), "w");
     SaveEvalMetadata(eval_meta_file);
+    fclose(eval_meta_file);
 
     lock_.unlock();
 }
@@ -101,6 +102,7 @@ void Trainer::SaveEvalData(FILE* eval_file) const {
     auto count = dataset_->y_size() * ticks_per_predict_;
     fwrite(pred_means_per_tick_, sizeof(float), count, eval_file);
     fwrite(pred_stds_per_tick_, sizeof(float), count, eval_file);
+    fflush(eval_file);
 }
 
 void Trainer::RunIteration(FILE* eval_file) {

@@ -55,7 +55,7 @@ class Model {
     // Used for gradually improving the wiring of the network.
     //
     // Shape: num_neurons_, num_neurons_ * num_neurons_.
-    OnlineCorrelater cor_;
+    OnlineCorrelater correlater_;
 };
 
 }  // namespace model
